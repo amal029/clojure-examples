@@ -1,4 +1,4 @@
-(ns first.core
+(ns first.evaluator
   (:gen-class))
 
 (use 'com.phansen.clojure.adt.core)
