@@ -16,11 +16,11 @@
          [{:v v}] v
          ))
 
-(defn -main
-  "I don't do a whole lot ... yet."
-  [& args]
-  (do (print '(T (T (L 3.0) (T (L 78) (L 8) -) *) (L 4) +)) 
-      (print " = ")
-      (println (opt (T (T (L 3.0) (T (L 78) (L 8) -) *) (L 4) +)))))
+;; (defn -main
+;;   "I don't do a whole lot ... yet."
+;;   [& args]
+;;   (do (print '(T (T (L 3.0) (T (L 78) (L 8) -) *) (L 4) +)) 
+;;       (print " = ")
+;;       (println (opt (T (T (L 3.0) (T (L 78) (L 8) -) *) (L 4) +)))))
 
 

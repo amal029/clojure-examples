@@ -26,17 +26,17 @@
                        (= v value) bt
                        :else nil))))
 
-(defn bt-insert [bt value]
+(defn bt-insert [value bt]
   (if (nil? bt) (Leaf value)
       (match [bt]
              [{:v v :lbt l :rbt r}] (cond 
-                                     (< value v) (Tree v (bt-insert l value) r)
-                                     (> value v) (Tree v l (bt-insert r value))
+                                     (< value v) (Tree v (bt-insert value l) r)
+                                     (> value v) (Tree v l (bt-insert value r))
                                      :else bt
                                      )
              [{:v v}] (cond 
-                       (< value v) (Tree v (bt-insert nil value) nil)
-                       (> value v) (Tree v nil (bt-insert nil value))
+                       (< value v) (Tree v (bt-insert value nil) nil)
+                       (> value v) (Tree v nil (bt-insert value nil))
                        :else bt
                        ))))
 
@@ -52,25 +52,18 @@
       (match [bt]
              [{:v v :lbt l :rbt r}] (cond 
                                      (= value v) (match [l]
-                                                        [{:v vi :lbt li :rbt ri}] (cond
-                                                                                   (nil? ri) (Tree vi li r)
-                                                                                   :else 
-                                                                                   (let [cbt (atom r)]
-                                                                                     (println "before entering map")
-                                                                                     (println @cbt)
-                                                                                     (println (count (bt-to-list ri)))
-                                                                                     (map 
-                                                                                      #(swap! cbt bt-insert @cbt %)
-                                                                                      (do (println (bt-to-list ri)) (bt-to-list ri)))
-                                                                                     (Tree vi li @cbt)))
+                                                        [{:v vi :lbt li :rbt ri}] (if
+                                                                                      (nil? ri) (Tree vi li r)
+                                                                                      (let [cbt (atom r)]
+                                                                                        (nth (map 
+                                                                                              #(reset! cbt (bt-insert % @cbt))
+                                                                                              (bt-to-list ri)) (- (count ri) 1))
+                                                                                        (Tree vi li @cbt)))
                                                         [{:v vi}] (Tree vi nil r)
                                                         )
                                      (> value v) (Tree v l (bt-delete r value))
                                      :else (Tree v (bt-delete l value) r))
              [{:v v}] (if (= value v) nil bt))))
 
-(def abt (Tree 10 (Leaf 6) (Leaf 11)))
-(bt-search 6 first.binarytree/abt)
-abt
-(map #(+ 2 %) (bt-to-list abt))
-(bt-delete (bt-insert (bt-insert abt 4) 7) 10)
+
+
