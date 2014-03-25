@@ -34,15 +34,13 @@
          [[a b c d]] (T a b c d)
          ))
 
-(defn rb-tree-ins [x s]
-  (match [s]
-         [{}] (T (R 'r) (E) x (E))
-         [{:c c :l a :v y :r b}] (cond
-                                  (< x y) (rb-tree-balance [c (rb-tree-ins x a) y b])
-                                  (> x y) (rb-tree-balance [c a y (rb-tree-ins x b)])
-                                  :else s
-                                  )))
-
 (defn rb-tree-insert [x s]
-  (match [(rb-tree-ins [x s])]
-         [{:c _ :l a :v y :r b}] (T (B 'b) a y b)))
+  (let [ins #(match [%]
+                    [{}] (T (R 'r) (E) x (E))
+                    [{:c c :l a :v y :r b}] (cond
+                                             (< x y) (rb-tree-balance [c (ins a) y b])
+                                             (> x y) (rb-tree-balance [c a y (ins b)])
+                                             :else %
+                                             ))]
+    (match [(ins s)]
+           [{:c _ :l a :v y :r b}] (T (B 'b) a y b))))
