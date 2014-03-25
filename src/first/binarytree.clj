@@ -54,9 +54,9 @@
                                      (= value v) (match [l]
                                                         [{:v vi :lbt li :rbt ri}] (if
                                                                                       (nil? ri) (Tree vi li r)
-                                                                                      (let [cbt (atom r)]
+                                                                                      (let [cbt (ref r)]
                                                                                         (nth (pmap 
-                                                                                              #(reset! cbt (bt-insert % @cbt))
+                                                                                              #(dosync (ref-set cbt (bt-insert % @cbt)))
                                                                                               (bt-to-list ri)) (- (count ri) 1))
                                                                                         (Tree vi li @cbt)))
                                                         [{:v vi}] (Tree vi nil r)
