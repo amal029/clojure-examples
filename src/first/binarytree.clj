@@ -55,9 +55,9 @@
                                                         [{:v vi :lbt li :rbt ri}] (if
                                                                                       (nil? ri) (Tree vi li r)
                                                                                       (let [cbt (ref r)]
-                                                                                        (nth (pmap 
-                                                                                              #(dosync (ref-set cbt (bt-insert % @cbt)))
-                                                                                              (bt-to-list ri)) (- (count ri) 1))
+                                                                                        (pmap 
+                                                                                         #(dosync (ref-set cbt (bt-insert % @cbt)))
+                                                                                         (bt-to-list ri))
                                                                                         (Tree vi li @cbt)))
                                                         [{:v vi}] (Tree vi nil r)
                                                         )
