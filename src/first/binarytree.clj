@@ -55,7 +55,7 @@
                                                         [{:v vi :lbt li :rbt ri}] (if
                                                                                       (nil? ri) (Tree vi li r)
                                                                                       (let [cbt (atom r)]
-                                                                                        (nth (map 
+                                                                                        (nth (pmap 
                                                                                               #(reset! cbt (bt-insert % @cbt))
                                                                                               (bt-to-list ri)) (- (count ri) 1))
                                                                                         (Tree vi li @cbt)))
@@ -64,6 +64,3 @@
                                      (> value v) (Tree v l (bt-delete r value))
                                      :else (Tree v (bt-delete l value) r))
              [{:v v}] (if (= value v) nil bt))))
-
-
-
