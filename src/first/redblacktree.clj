@@ -71,10 +71,10 @@
   (match [tuple]
          [[{} a]] a
          [[a {}]] a
-         [[{:c {:r _} :l a :v x :r b} {:c {:r _} :l c :v y :r d}]] (match (app [b c])
+         [[{:c {:r _} :l a :v x :r b} {:c {:r _} :l c :v y :r d}]] (match [(app [b c])]
                                                                           [{:c {:r _} :l b' :v z :r c'}] (T (R 'r) (T (R 'r) a x b') z (T (R 'r) c' y d))
                                                                           [{:c c :l l :v v :r r}] (T (R 'r) a x (T (R 'r) (T c l v r) y d)))
-         [[{:c {:b _} :l a :v x :r b} {:c {:b _} :l c :v y :r d}]] (match (app [b c])
+         [[{:c {:b _} :l a :v x :r b} {:c {:b _} :l c :v y :r d}]] (match [(app [b c])]
                                                                           [{:c {:r _} :l b' :v z :r c'}] (T (R 'r) (T (B 'b) a x b') z (T (B 'b) c' y d))
                                                                           [{:c c :l l :v v :r r}] (balleft a x (T (B 'b) c' y d)))
          [[a {:c {:r _} :l b :v x :r c}]] (T (R 'r) (app [a b]) x c)
