@@ -26,17 +26,17 @@
                        (= v value) bt
                        :else nil))))
 
-(defn bt-insert [value bt]
+(defn bt-insert [bt value]
   (if (nil? bt) (Leaf value)
       (match [bt]
              [{:v v :lbt l :rbt r}] (cond 
-                                     (< value v) (Tree v (bt-insert value l) r)
-                                     (> value v) (Tree v l (bt-insert value r))
+                                     (< value v) (Tree v (bt-insert l value) r)
+                                     (> value v) (Tree v l (bt-insert r value))
                                      :else bt
                                      )
              [{:v v}] (cond 
-                       (< value v) (Tree v (bt-insert value nil) nil)
-                       (> value v) (Tree v nil (bt-insert value nil))
+                       (< value v) (Tree v (bt-insert nil value) nil)
+                       (> value v) (Tree v nil (bt-insert nil value))
                        :else bt
                        ))))
 
@@ -54,11 +54,8 @@
                                      (= value v) (match [l]
                                                         [{:v vi :lbt li :rbt ri}] (if
                                                                                       (nil? ri) (Tree vi li r)
-                                                                                      (let [cbt (ref r)]
-                                                                                        (pmap 
-                                                                                         #(dosync (ref-set cbt (bt-insert % @cbt)))
-                                                                                         (bt-to-list ri))
-                                                                                        (Tree vi li @cbt)))
+                                                                                      (let [res (reduce bt-insert r (bt-to-list ri))]
+                                                                                        (Tree vi li res)))
                                                         [{:v vi}] (Tree vi nil r)
                                                         )
                                      (> value v) (Tree v l (bt-delete r value))

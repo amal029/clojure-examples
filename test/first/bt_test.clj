@@ -15,8 +15,8 @@
 
 (deftest bt-insert-test
   (testing "Inserting into a btree"
-    (is (= {:rbt {:v 11}, :lbt {:rbt {:v 7}, :lbt nil, :v 6}, :v 10} (bt-insert 7 abt)))))
+    (is (= {:rbt {:v 11}, :lbt {:rbt {:v 7}, :lbt nil, :v 6}, :v 10} (bt-insert abt 7)))))
 
 (deftest bt-delete-test
   (testing "Deleting from a btree"
-    (is (= {:rbt {:rbt nil, :lbt {:v 7}, :v 11}, :lbt {:v 4}, :v 6} (bt-delete (bt-insert 7 (bt-insert 4 abt)) 10)))))
+    (is (= {:rbt {:rbt nil, :lbt {:v 7}, :v 11}, :lbt {:v 4}, :v 6} (bt-delete (bt-insert (bt-insert abt 4) 7) 10)))))
